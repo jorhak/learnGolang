@@ -19,6 +19,23 @@ func calculateTotalStock(inventory map[string]int) int{
     return total
 }
 
+type Product struct {
+   Name string
+   Price float64
+   Stock int
+}
+
+func printProducts(products []Product) {
+    for _, product := range products {
+       fmt.Printf(
+           "%s | %.2f | %d\n",
+           product.Name,
+           product.Price,
+           product.Stock,
+       )
+    }
+}
+
 func main(){
     inventory := map[string]int{
         "Laptop":   15,
@@ -30,4 +47,24 @@ func main(){
     printInventory(inventory)
     total := calculateTotalStock(inventory)
     fmt.Println("\nTotal Stock:", total)
+
+    products := []Product{
+        {
+           Name: "Laptop",
+           Price: 1200,
+           Stock: 10,
+        },
+        {
+           Name: "Mouse",
+           Price: 20,
+           Stock: 50,
+        },
+        {
+           Name: "Keyboard",
+           Price: 35,
+           Stock: 25,
+        },
+    }
+    fmt.Println("====== Slice Struct=======")
+    printProducts(products)
 }
