@@ -2,6 +2,13 @@ package main
 
 import "fmt"
 
+type Product struct {
+   ID int
+   Name string
+   Price float64
+   Stock int
+}
+
 func printInventory(inventory map[string]int){
     fmt.Println("\n====== INVENTORY =========\n")
 
@@ -19,12 +26,6 @@ func calculateTotalStock(inventory map[string]int) int{
     return total
 }
 
-type Product struct {
-   Name string
-   Price float64
-   Stock int
-}
-
 func printProducts(products []Product) {
     for _, product := range products {
        fmt.Printf(
@@ -34,6 +35,36 @@ func printProducts(products []Product) {
            product.Stock,
        )
     }
+}
+
+func NewProduct(
+     id int,
+     name string,
+     price float64,
+     stock int,
+) *Product {
+   return &Product{
+       ID: id,
+       Name: name,
+       Price: price,
+       Stock: stock,
+   }
+}
+
+func (p *Product) UpdatePrice(
+    price float64,
+) {
+    p.Price = price
+}
+
+func (p *Product) AddStock(
+    quantity int,
+) {
+   p.Stock += quantity
+}
+
+func (p Product) InventoryValue() float64 {
+    return p.Price * float64(p.Stock)
 }
 
 func main(){
@@ -67,4 +98,22 @@ func main(){
     }
     fmt.Println("====== Slice Struct=======")
     printProducts(products)
+
+   fmt.Println("======= Construct Pattern=======")
+   product := NewProduct(
+          1,
+          "Laptop",
+          1200,
+          10,
+    )
+
+    product.UpdatePrice(1500)
+    product.AddStock(5)
+    fmt.Println(
+       "Stock:", product.Stock,
+    )
+    fmt.Println(
+       "Inventory Value:",
+       product.InventoryValue(),
+    )
 }
