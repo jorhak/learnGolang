@@ -37,6 +37,10 @@ func (o Order) Total() float64 {
     return o.Product.Price * float64(o.Quantity)
 }
 
+func updateProduct(product *Product){
+    product.Price = 1500
+}
+
 func main(){
     laptop := Product{
       Name: "Laptop Dell",
@@ -61,4 +65,12 @@ func main(){
     fmt.Println(laptop.FinalPrice())
     customer.Display()
     fmt.Println(order.Total())
+
+    product := Product{
+        Name: "Laptop",
+        Price: 1200,
+    }
+    fmt.Println("Valor actual: ", product.Price)
+    updateProduct(&product)
+    fmt.Println("Valor actualizado: ", product.Price)
 }
