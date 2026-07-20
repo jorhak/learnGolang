@@ -49,6 +49,24 @@ func ProcessPayment(method PaymentMethod, amount float64) {
     method.Pay(amount)
 }
 
+// Dependency Injection
+type PaymentService struct {
+    method PaymentMethod
+}
+
+func NewPaymentService(
+    method PaymentMethod,
+) *PaymentService {
+  return &PaymentService{
+        method: method,
+  }
+}
+
+func (p PaymentService) Process(
+    amount float64,
+) {
+  p.method.Pay(amount)
+}
 
 func main(){
     credit := CreditCard{
@@ -69,4 +87,17 @@ func main(){
     ProcessPayment(credit, 100)
     ProcessPayment(qr, 200)
     ProcessPayment(b, 120)
+    fmt.Println("====== Dependency Injection ========")
+    cardService := NewPaymentService(
+                      credit,
+    )
+     cardService.Process(39)
+     qrService := NewPaymentService(
+                      qr,
+    )
+    qrService.Process(15)
+    transferService := NewPaymentService(
+                      b,
+    )
+    transferService.Process(990)
 }
