@@ -18,7 +18,11 @@ func main(){
               Stock: 10,
     }
 
-    data, err := json.Marshal(product)
+    data, err := json.MarshalIndent(
+                product,
+                "",
+                " ",
+    )
     if err != nil {
           panic(err)
     }
