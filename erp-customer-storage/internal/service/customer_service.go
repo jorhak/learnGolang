@@ -20,3 +20,6 @@ func (s *CustomerService) Store(customers []domain.Customer) error {
     return s.customerRepository.Store(customers)
 }
 
+func (s *CustomerService) Load() ([]domain.Customer, error) {
+    return s.customerRepository.Load()
+}

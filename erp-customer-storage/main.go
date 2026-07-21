@@ -1,6 +1,7 @@
 package main
 
 import (
+   "fmt"
    "log"
    "erp-customer-storage/internal/domain"
    "erp-customer-storage/internal/repository"
@@ -31,10 +32,34 @@ func main() {
     if err != nil {
       log.Fatal("No se almacenaron los clientes",err)
     }
+    jsonCustomer, err := customerService.Load()
+    if err != nil {
+      log.Fatal("No se pudo visualizar JSON",err)
+    }
+    for _, customer := range jsonCustomer {
+       fmt.Printf(
+           "ID: %d | Name: %s | Email: %s\n",
+           customer.ID,
+           customer.Name,
+           customer.Email,
+       )
+    }
     mysql := repository.NewMYSQLRepository("mysql.json")
     customerService = service.NewCustomerService(mysql)
     err = customerService.Store(customers)
     if err != nil {
       log.Fatal("No se almacenaron los clientes en MSYSQL", err)
+    }
+    mysqlCustomer, err := customerService.Load()
+    if err != nil {
+      log.Fatal("No se pudo visualizar MYSQL",err)
+    }
+    for _, customer := range mysqlCustomer {
+       fmt.Printf(
+           "ID: %d :: Name: %s :: Email: %s\n",
+           customer.ID,
+           customer.Name,
+           customer.Email,
+       )
     }
 }

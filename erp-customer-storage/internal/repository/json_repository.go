@@ -31,3 +31,21 @@ func (m *JSONRepository) Store(customers []domain.Customer) error {
                  0644,
             )
 }
+
+func (m *JSONRepository) Load() ([]domain.Customer, error) {
+    data, err := os.ReadFile(
+          m.FileName,
+    )
+    if err != nil {
+      return nil, err
+    }
+    var customers []domain.Customer
+    err = json.Unmarshal(
+               data,
+               &customers,
+    )
+    if err != nil {
+      return nil, err
+    }
+    return customers, nil
+}
