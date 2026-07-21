@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 import "encoding/json"
+import "os"
 
 type Product struct {
     ID    int
@@ -44,4 +45,14 @@ func main(){
                 " ",
     )
     fmt.Println(string(data))
+    fmt.Println("Guardar json en archivo")
+    err = os.WriteFile(
+          "products.json",
+           data,
+           0644,
+    )
+    content, err := os.ReadFile(
+                  "products.json",
+    )
+    fmt.Println(string(content))
 }
