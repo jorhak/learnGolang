@@ -27,4 +27,21 @@ func main(){
           panic(err)
     }
     fmt.Println(string(data))
+    fmt.Println("Slice a json")
+    products := []Product{
+             {
+               ID: 1,
+               Name: "Laptop",
+             },
+             {
+               ID: 2,
+               Name: "Mouse",
+             },
+    }
+    data, err = json.MarshalIndent(
+                products,
+                "",
+                " ",
+    )
+    fmt.Println(string(data))
 }
