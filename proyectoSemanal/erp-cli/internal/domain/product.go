@@ -1,0 +1,12 @@
+package domain
+
+type Product struct {
+    ID    int     `json:"id"`
+    Name  string  `json:"name"`
+    Price float64 `json:"price"`
+    Stock int     `json:"stock"`
+}
+
+func (p Product) InventoryValue() float64 {
+    return p.Price * float64(p.Stock)
+}
