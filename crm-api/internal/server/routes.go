@@ -7,6 +7,7 @@ import(
 func (s *Server) routes() {
     healthHandler := handler.NewHealthHandler()
     versionHandler := handler.NewVersionHandler()
+    customerHandler := handler.NewCustomerHandler()
 
     s.mux.HandleFunc(
        "/health",
@@ -16,5 +17,10 @@ func (s *Server) routes() {
     s.mux.HandleFunc(
        "/version",
        versionHandler.Version,
+    )
+
+    s.mux.HandleFunc(
+       "/customers",
+       customerHandler.GetCustomers,
     )
 }
