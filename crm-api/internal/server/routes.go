@@ -9,6 +9,7 @@ func (s *Server) routes() {
     versionHandler := handler.NewVersionHandler()
     customerHandler := handler.NewCustomerHandler()
     customerResponse := handler.NewCustomerResponse("Saludos Terricolas")
+    customer := handler.NewTareaHandler()
 
     s.mux.HandleFunc(
        "/health",
@@ -28,5 +29,10 @@ func (s *Server) routes() {
     s.mux.HandleFunc(
        "/customerResponse",
        customerResponse.GetCustomerResponse,
+    )
+
+    s.mux.HandleFunc(
+       "/customer",
+       customer.Get,
     )
 }
