@@ -2,14 +2,19 @@ package server
 
 import(
    "crm-api/internal/handler"
+   "crm-api/internal/service"
 )
 
 func (s *Server) routes() {
     healthHandler := handler.NewHealthHandler()
     versionHandler := handler.NewVersionHandler()
-    customerHandler := handler.NewCustomerHandler()
     customerResponse := handler.NewCustomerResponse("Saludos Terricolas")
     customer := handler.NewTareaHandler()
+
+    customerService := service.NewCustomerService()
+    customerHandler := handler.NewCustomerHandler(
+                       customerService,
+    )
 
     s.mux.HandleFunc(
        "/health",
@@ -34,5 +39,10 @@ func (s *Server) routes() {
     s.mux.HandleFunc(
        "/customer",
        customer.Get,
+    )
+
+    s.mux.HandleFunc(
+       "/cliente",
+       customerHandler.GetCustomerByID,
     )
 }

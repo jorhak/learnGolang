@@ -3,40 +3,93 @@ package handler
 import(
    "fmt"
    "net/http"
+   "encoding/json"
+   "strconv"
+   "crm-api/internal/service"
 )
 
-type CustomerHandler struct {}
-
-func NewCustomerHandler() *CustomerHandler{
-    return &CustomerHandler{}
+// CustomerHandler maneja las peticiones HTTP relacionadas con clientes
+type CustomerHandler struct {
+    service *service.CustomerService
 }
 
+// NewCustomerHandler crea una nueva instancia del handler
+func NewCustomerHandler(
+    service *service.CustomerService,
+) *CustomerHandler{
+    return &CustomerHandler{
+             service: service,
+    }
+}
+
+// GetCustomers obtiene el listado de clientes
 func (h *CustomerHandler) GetCustomers(
     w http.ResponseWriter,
     r *http.Request,
 ) {
-    fmt.Println("Metodo:", r.Method)
-    //Leer Url
-    fmt.Println(r.URL.Path,)
-    //Leer Query Parameters
-    page := r.URL.Query().Get("page")
-    limit := r.URL.Query().Get("limit")
-    fmt.Println(page)
-    fmt.Println(limit)
-    //Leer Headers
-    token := r.Header.Get("Authorization",)
-    fmt.Println(token)
-    //Enviar Header
+    customers := h.service.GetCustomers()
+    fmt.Println("Customer con Service")
+
     w.Header().Set(
        "Content-Type",
        "application/json",
     )
     w.Header().Set(
       "Author",
-      "SABOR-LATINO",
+      "Maria-Joaquina",
     )
-    //Enviar Status
-    w.WriteHeader(http.StatusCreated)
-    //w.WriteHeader(http.StatusOK)
-    _, _ = w.Write([]byte("Cambio Listado de Clientes"))
+
+    w.WriteHeader(http.StatusOK)
+    err := json.NewEncoder(w).Encode(customers)
+    if err != nil {
+      http.Error(
+         w,
+         "Internal Server Error",
+         http.StatusInternalServerError,
+      )
+      return
+    }
+}
+
+func (h *CustomerHandler) GetCustomerByID(
+    w http.ResponseWriter,
+    r *http.Request,
+) {
+
+    w.Header().Set(
+       "Content-Type",
+       "application/json",
+    )
+    w.Header().Set(
+      "Author",
+      "Maria-Joaquina",
+    )
+    idStr := r.URL.Query().Get("id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+      http.Error(w, "El ID proporcionado debe ser un numero entero valido", http.StatusBadRequest)
+      return
+    }
+
+    customer, exits := h.service.GetCustomerByID(id)
+    if exits == false {
+      http.Error(
+        w,
+        "Cliente no encontrado",
+        http.StatusNotFound,
+      )
+      return
+    }
+    fmt.Println("Obteniendo customer por ID")
+
+    w.WriteHeader(http.StatusOK)
+    err = json.NewEncoder(w).Encode(customer)
+    if err != nil {
+      http.Error(
+         w,
+         "Internal Server Error",
+         http.StatusInternalServerError,
+      )
+      return
+    }
 }
