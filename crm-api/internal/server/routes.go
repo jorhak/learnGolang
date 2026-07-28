@@ -3,6 +3,7 @@ package server
 import(
    "crm-api/internal/handler"
    "crm-api/internal/service"
+	 "crm-api/internal/repository"
 )
 
 func (s *Server) routes() {
@@ -11,7 +12,10 @@ func (s *Server) routes() {
     customerResponse := handler.NewCustomerResponse("Saludos Terricolas")
     customer := handler.NewTareaHandler()
 
-    customerService := service.NewCustomerService()
+		memoryRepository := repository.NewMemoryCustomerRepository()
+    customerService := service.NewCustomerService(
+			memoryRepository,
+		)
     customerHandler := handler.NewCustomerHandler(
                        customerService,
     )
