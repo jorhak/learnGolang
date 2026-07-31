@@ -5,27 +5,26 @@ import (
 )
 
 // MemoryCustomerRepository implementa CustomerRepository utilizando memoria
-type MemoryCustomerRepository struct {}
+type MemoryCustomerRepository struct {
+	customers []domain.Customer
+}
 
 // NewMemoryCustomerRepository crea un nuevo repositorio en memoria
 func NewMemoryCustomerRepository() *MemoryCustomerRepository {
-	return &MemoryCustomerRepository{}
+	return &MemoryCustomerRepository{
+		customers: []domain.Customer{
+			{
+				ID: 1,
+				Name: "Maria Joaquina",
+				Email: "maria@joaquina.com",
+			},
+		},
+	}
 }
 
 // GetAll devuelve todos los clientes alamacenados en memoria
 func (r *MemoryCustomerRepository) GetAll() []domain.Customer {
-	return []domain.Customer{
-		{
-			ID: 1,
-			Name: "Glucosa",
-			Email: "glucosa@gmail.com",
-		},
-		{
-			ID: 2,
-			Name: "Creatina",
-			Email: "creatina@gmail.com",
-		},
-	}
+	return r.customers
 }
 
 // GetByID devuelve al cliente con el ID correspondiente
@@ -44,5 +43,10 @@ func bucarByID(id int, customers []domain.Customer) *domain.Customer {
 			return &customers[i]
 		}
 	}
+	return nil
+}
+
+func (r *MemoryCustomerRepository) Create(customer domain.Customer) error {
+	r.customers = append(r.customers, customer)
 	return nil
 }

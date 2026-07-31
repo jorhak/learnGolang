@@ -1,6 +1,7 @@
 package service
 
 import(
+	 "errors"
    "crm-api/internal/domain"
 	 "crm-api/internal/repository"
 )
@@ -27,4 +28,16 @@ func (s *CustomerService) GetCustomers() []domain.Customer {
 // Funcion que busca el objeto con el ID
 func (s *CustomerService) GetCustomerByID(id int) (domain.Customer, bool) {
 	return s.repository.GetByID(id)
+}
+
+func (s *CustomerService) CreateCustomer(customer domain.Customer) error {
+	if customer.Name == "" {
+		return errors.New("customer name is required")
+	}
+
+	if customer.Email == "" {
+		return errors.New("cusotmer email is required")
+	}
+
+	return s.repository.Create(customer)
 }

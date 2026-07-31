@@ -6,6 +6,7 @@ import(
    "encoding/json"
    "strconv"
    "crm-api/internal/service"
+	 "crm-api/internal/domain"
 )
 
 // CustomerHandler maneja las peticiones HTTP relacionadas con clientes
@@ -92,4 +93,39 @@ func (h *CustomerHandler) GetCustomerByID(
       )
       return
     }
+}
+
+func (h *CustomerHandler) CreateCustomer(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	var customer domain.Customer
+	
+	err := json.NewDecoder(
+		r.Body,
+	).Decode(&customer)
+
+	if err != nil {
+		http.Error(
+			w,
+			"Invalid Request",
+			http.StatusBadRequest,
+		)
+		return
+	}
+
+	err = h.service.CreateCustomer(customer)
+
+	if err != nil {
+		http.Error(
+			w,
+			err.Error(),
+			http.StatusBadRequest,
+		)
+		return
+	}
+
+	w.WriteHeader(
+		http.StatusCreated,
+	)
 }

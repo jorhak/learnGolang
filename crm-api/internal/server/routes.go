@@ -4,6 +4,7 @@ import(
    "crm-api/internal/handler"
    "crm-api/internal/service"
 	 "crm-api/internal/repository"
+	 "net/http"
 )
 
 func (s *Server) routes() {
@@ -32,7 +33,32 @@ func (s *Server) routes() {
 
     s.mux.HandleFunc(
        "/customers",
-       customerHandler.GetCustomers,
+			 func (
+				 w http.ResponseWriter,
+				 r *http.Request,
+			 ) {
+				 switch r.Method {
+
+				 case http.MethodGet:
+					 customerHandler.GetCustomers(
+						 w,
+						 r,
+					 )
+
+				 case http.MethodPost:
+					 customerHandler.CreateCustomer(
+						 w,
+						 r,
+					 )
+
+				 default:
+					 http.NotFound(
+						 w,
+						 r,
+					 )
+
+				}
+			 },
     )
 
     s.mux.HandleFunc(
