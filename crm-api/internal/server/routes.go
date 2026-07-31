@@ -61,6 +61,11 @@ func (s *Server) routes() {
 			 },
     )
 
+		s.mux.HandleFunc(
+			"/delete",
+			customerHandler.DeleteCustomer,
+		)
+
     s.mux.HandleFunc(
        "/customerResponse",
        customerResponse.GetCustomerResponse,

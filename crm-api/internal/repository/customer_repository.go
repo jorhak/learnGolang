@@ -9,4 +9,5 @@ type CustomerRepository interface {
 	GetAll() []domain.Customer
 	GetByID(id int) (domain.Customer, bool)
 	Create(customer domain.Customer) error
+	Delete(id int) error
 }

@@ -30,6 +30,7 @@ func (s *CustomerService) GetCustomerByID(id int) (domain.Customer, bool) {
 	return s.repository.GetByID(id)
 }
 
+// Funcion que crea un customer
 func (s *CustomerService) CreateCustomer(customer domain.Customer) error {
 	if customer.Name == "" {
 		return errors.New("customer name is required")
@@ -40,4 +41,13 @@ func (s *CustomerService) CreateCustomer(customer domain.Customer) error {
 	}
 
 	return s.repository.Create(customer)
+}
+
+// Funcion que elimina un customer por ID
+func (s *CustomerService) DeleteCustomer(id int) error {
+
+	if id == 0 {
+		return errors.New("ID great 0")
+	}
+	return s.repository.Delete(id)
 }

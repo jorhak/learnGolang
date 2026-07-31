@@ -52,6 +52,7 @@ func (h *CustomerHandler) GetCustomers(
     }
 }
 
+// Obtiene customer por medio de un ID
 func (h *CustomerHandler) GetCustomerByID(
     w http.ResponseWriter,
     r *http.Request,
@@ -95,6 +96,7 @@ func (h *CustomerHandler) GetCustomerByID(
     }
 }
 
+// Crea un customer
 func (h *CustomerHandler) CreateCustomer(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -127,5 +129,33 @@ func (h *CustomerHandler) CreateCustomer(
 
 	w.WriteHeader(
 		http.StatusCreated,
+	)
+}
+
+// Elimina un customer por medio de ID
+func (h *CustomerHandler) DeleteCustomer(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+
+	idStr := r.URL.Query().Get("id")
+  id, err := strconv.Atoi(idStr)
+  
+	if err != nil {
+    http.Error(w, "El ID proporcionado debe ser un numero entero valido", http.StatusBadRequest)
+    return
+  }
+
+	err = h.service.DeleteCustomer(id)
+	if err != nil {
+		http.Error(
+			w,
+			err.Error(),
+			http.StatusBadRequest,
+		)
+		return
+	}
+	w.WriteHeader(
+		http.StatusOK,
 	)
 }

@@ -46,7 +46,23 @@ func bucarByID(id int, customers []domain.Customer) *domain.Customer {
 	return nil
 }
 
+// Crear un customer en memoria
 func (r *MemoryCustomerRepository) Create(customer domain.Customer) error {
 	r.customers = append(r.customers, customer)
 	return nil
+}
+
+// Elimina un customer de memoria
+func (r *MemoryCustomerRepository) Delete(id int) error {
+	r.customers = eliminarByID(r.customers, id)
+	return nil
+}
+
+func eliminarByID(customers []domain.Customer, id int) []domain.Customer {
+	for i := range customers {
+		if customers[i].ID == id {
+			return append(customers[:i],customers[i+1:]...)
+		}
+	}
+	return customers
 }
