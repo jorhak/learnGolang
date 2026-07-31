@@ -10,10 +10,13 @@ type Server struct {
 }
 
 func New() *Server {
+	  mux := http.NewServeMux()
     s := &Server{
-        mux: http.NewServeMux(),
+        mux: mux,
     }
-    s.routes()
+		RegisterRoutes(
+			mux,
+		)
     return s
 }
 

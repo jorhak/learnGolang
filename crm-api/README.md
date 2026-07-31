@@ -22,7 +22,7 @@ curl -i "localhost:8080/delete?id=3"
 ```
 o 
 ```
-curl -i -X DELETE "localhost:8080/deelte?id=3"
+curl -i -X DELETE "localhost:8080/delete?id=3"
 ```
 ```
 ```

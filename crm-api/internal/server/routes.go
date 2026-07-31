@@ -7,7 +7,10 @@ import(
 	 "net/http"
 )
 
-func (s *Server) routes() {
+func RegisterRoutes(
+	mux *http.ServeMux,
+) {
+
     healthHandler := handler.NewHealthHandler()
     versionHandler := handler.NewVersionHandler()
     customerResponse := handler.NewCustomerResponse("Saludos Terricolas")
@@ -21,17 +24,17 @@ func (s *Server) routes() {
                        customerService,
     )
 
-    s.mux.HandleFunc(
+    mux.HandleFunc(
        "/health",
        healthHandler.Health,
     )
 
-    s.mux.HandleFunc(
+    mux.HandleFunc(
        "/version",
        versionHandler.Version,
     )
 
-    s.mux.HandleFunc(
+    mux.HandleFunc(
        "/customers",
 			 func (
 				 w http.ResponseWriter,
@@ -61,22 +64,22 @@ func (s *Server) routes() {
 			 },
     )
 
-		s.mux.HandleFunc(
+		mux.HandleFunc(
 			"/delete",
 			customerHandler.DeleteCustomer,
 		)
 
-    s.mux.HandleFunc(
+    mux.HandleFunc(
        "/customerResponse",
        customerResponse.GetCustomerResponse,
     )
 
-    s.mux.HandleFunc(
+    mux.HandleFunc(
        "/customer",
        customer.Get,
     )
 
-    s.mux.HandleFunc(
+    mux.HandleFunc(
        "/cliente",
        customerHandler.GetCustomerByID,
     )
