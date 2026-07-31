@@ -14,7 +14,7 @@ curl -X POST localhost:8080/customers \
 ```
 ## 2.2 GetByID
 ```
-curl -i "localhost:8080/cliente?id=2"
+curl -i localhost:8080/customers/3
 ```
 ## 2.3 DeleteCustomer 
 ```

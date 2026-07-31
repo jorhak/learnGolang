@@ -5,6 +5,7 @@ import(
    "net/http"
    "encoding/json"
    "strconv"
+	 "strings"
    "crm-api/internal/service"
 	 "crm-api/internal/domain"
 )
@@ -58,6 +59,36 @@ func (h *CustomerHandler) GetCustomerByID(
     r *http.Request,
 ) {
 
+		path := strings.TrimPrefix(
+			r.URL.Path,
+			"/customers/",
+		)
+    
+    id, err := strconv.Atoi(path)
+
+    if err != nil {
+      http.Error(
+				w,
+				"El ID proporcionado debe ser un numero entero valido",
+				http.StatusBadRequest,
+			)
+      return
+    }
+
+    customer, err := h.service.GetCustomerByID(id)
+
+    if err != nil {
+      http.Error(
+        w,
+        err.Error(),
+        http.StatusNotFound,
+      )
+      return
+    }
+    fmt.Println("Obteniendo customer por ID")
+
+		response, _ := json.Marshal(customer)
+
     w.Header().Set(
        "Content-Type",
        "application/json",
@@ -66,34 +97,8 @@ func (h *CustomerHandler) GetCustomerByID(
       "Author",
       "Maria-Joaquina",
     )
-    idStr := r.URL.Query().Get("id")
-    id, err := strconv.Atoi(idStr)
-    if err != nil {
-      http.Error(w, "El ID proporcionado debe ser un numero entero valido", http.StatusBadRequest)
-      return
-    }
 
-    customer, exits := h.service.GetCustomerByID(id)
-    if exits == false {
-      http.Error(
-        w,
-        "Cliente no encontrado",
-        http.StatusNotFound,
-      )
-      return
-    }
-    fmt.Println("Obteniendo customer por ID")
-
-    w.WriteHeader(http.StatusOK)
-    err = json.NewEncoder(w).Encode(customer)
-    if err != nil {
-      http.Error(
-         w,
-         "Internal Server Error",
-         http.StatusInternalServerError,
-      )
-      return
-    }
+		w.Write(response)
 }
 
 // Crea un customer

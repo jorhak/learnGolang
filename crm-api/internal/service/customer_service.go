@@ -26,7 +26,7 @@ func (s *CustomerService) GetCustomers() []domain.Customer {
 }
 
 // Funcion que busca el objeto con el ID
-func (s *CustomerService) GetCustomerByID(id int) (domain.Customer, bool) {
+func (s *CustomerService) GetCustomerByID(id int) (domain.Customer, error) {
 	return s.repository.GetByID(id)
 }
 

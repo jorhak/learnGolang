@@ -80,7 +80,7 @@ func RegisterRoutes(
     )
 
     mux.HandleFunc(
-       "/cliente",
+       "/customers/",
        customerHandler.GetCustomerByID,
     )
 }

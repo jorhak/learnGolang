@@ -2,6 +2,7 @@ package repository
 
 import (
 	"crm-api/internal/domain"
+	"errors"
 )
 
 // MemoryCustomerRepository implementa CustomerRepository utilizando memoria
@@ -28,22 +29,13 @@ func (r *MemoryCustomerRepository) GetAll() []domain.Customer {
 }
 
 // GetByID devuelve al cliente con el ID correspondiente
-func (r *MemoryCustomerRepository) GetByID(id int) (domain.Customer, bool) {
-	customers := r.GetAll()
-	customer := bucarByID(id, customers)
-	if customer != nil {
-		return *customer, true
-	}
-	return domain.Customer{}, false
-}
-
-func bucarByID(id int, customers []domain.Customer) *domain.Customer {
-	for i := range customers {
-		if customers[i].ID == id {
-			return &customers[i]
+func (r *MemoryCustomerRepository) GetByID(id int) (domain.Customer, error) {
+	for _, customer := range r.customers  {
+		if customer.ID == id {
+			return customer, nil
 		}
 	}
-	return nil
+	return domain.Customer{}, errors.New("Customer not found")
 }
 
 // Crear un customer en memoria

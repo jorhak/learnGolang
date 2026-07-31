@@ -7,7 +7,7 @@ import (
 // CustomerRepository define el contrato para acceder a los clientes
 type CustomerRepository interface {
 	GetAll() []domain.Customer
-	GetByID(id int) (domain.Customer, bool)
+	GetByID(id int) (domain.Customer, error)
 	Create(customer domain.Customer) error
 	Delete(id int) error
 }
